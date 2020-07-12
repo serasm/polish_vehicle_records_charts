@@ -6,10 +6,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Entities\" />
-    <Folder Include="Models\Builders\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
