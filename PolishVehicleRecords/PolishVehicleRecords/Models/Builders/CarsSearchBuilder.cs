@@ -1,7 +1,6 @@
 ﻿using PolishVehicleRecords.Models.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PolishVehicleRecords.Models.Builders
 {
