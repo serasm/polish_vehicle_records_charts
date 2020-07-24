@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PolishVehicleRecords.Services.DataSource.CepikApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace PolishVehicleRecords.Views.Main
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel viewModel;
+        public MainViewModel ViewModel
+        {
+            get => viewModel;
+            set => this.DataContext = viewModel = value;
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+            ViewModel = new MainViewModel(new DictionariesValues(), new CarsData());
         }
     }
 }

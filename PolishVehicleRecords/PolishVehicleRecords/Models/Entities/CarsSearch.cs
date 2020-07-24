@@ -9,5 +9,6 @@ namespace PolishVehicleRecords.Models.Entities
         public bool OnlyRegistered = true;
         public ushort Limit = 100;
         public List<string> Fields, Voivodeships, Types;
+        public int Page;
     }
 }

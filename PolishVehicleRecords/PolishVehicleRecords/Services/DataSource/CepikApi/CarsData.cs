@@ -19,13 +19,14 @@ namespace PolishVehicleRecords.Services.DataSource.CepikApi
             httpClient = new HttpClient();
         }
 
-        public async Task<List<Car>> GetCars(CarsSearch search)
+        public Task<List<Car>> GetCars(CarsSearch search)
         {
             StringBuilder url = new StringBuilder(MAIN_URL);
             url.Append("/pojazdy?");
             url.Append($"data-od={search.StartDate.ToString("yyyyMMdd")}");
             url.Append($"&data-do={search.EndDate.ToString("yyyyMMdd")}");
             url.Append($"&limit={search.Limit}");
+            url.Append($"&page={search.Page}");
             foreach (string voivodeship in search.Voivodeships)
             {
                 url.Append($"&wojewodztwo={voivodeship}");
@@ -33,19 +34,22 @@ namespace PolishVehicleRecords.Services.DataSource.CepikApi
 
             List<Car> cars = new List<Car>();
 
-            await httpClient.GetAsync(url.ToString()).ContinueWith(async response =>
+            var t = httpClient.GetAsync(url.ToString()).ContinueWith(response =>
             {
                 var result = response.Result;
-                await result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
+                var t = result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
                 {
                     var jsonSettings = new JsonSerializerSettings();
                     jsonSettings.ContractResolver = new CustomCarResolver();
-                    var data = JsonConvert.DeserializeObject<JsonResponse<Car>>(jsonTask.Result, jsonSettings).data;
-                    cars = data.Select(s => s.attributes).ToList();
+                    var result = jsonTask.Result;
+                    var data = JsonConvert.DeserializeObject<JsonCarsResponse>(result, jsonSettings).data;
+                    return data.Select(s => s.attributes).ToList();
                 });
+
+                return t.Result;
             });
 
-            return cars;
+            return t;
         }
     }
 }

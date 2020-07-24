@@ -4,9 +4,123 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PolishVehicleRecords"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            Content="Ustawienia"/>
+        <Grid
+            Grid.Row="0"
+            Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Label
+                VerticalContentAlignment="Center"
+                Grid.Column="0"
+                Content="Źródło danych"/>
+            <RadioButton 
+                VerticalContentAlignment="Center"
+                Grid.Column="1"
+                GroupName="Source" 
+                Content="Internet"/>
+            <RadioButton
+                VerticalContentAlignment="Center"
+                Grid.Column="2"
+                GroupName="Source" 
+                Content="Plik"/>
+        </Grid>
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Label
+                VerticalContentAlignment="Center"
+                Grid.Column="0"
+                Content="Województwa"/>
+            <ComboBox
+                VerticalContentAlignment="Center"
+                Grid.Column="1"
+                Margin="8"
+                ItemsSource="{Binding Voivodeships, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <CheckBox
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                            <Label
+                                Content="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <Grid
+            Margin="5"
+            Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label
+                Grid.Column="0"
+                Content="Data początkowa"/>
+            <DatePicker
+                Grid.Column="1"
+                SelectedDate="{Binding StartDate, Mode=TwoWay}"/>
+            <Label
+                Grid.Column="2"
+                Content="Data końcowa"/>
+            <DatePicker
+                Grid.Column="3"
+                SelectedDate="{Binding EndDate, Mode=TwoWay}"/>
+        </Grid>
+        <Button
+            Grid.Column="1"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Content="Szukaj"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Command="{Binding SearchCommand}"/>
 
+        <ScrollViewer
+            Grid.ColumnSpan="2"
+            Grid.Row="3"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalScrollBarVisibility="Auto">
+            <StackPanel
+                Orientation="Vertical"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <lvc:PieChart LegendLocation="Bottom" 
+                              Series="{Binding FuelSeries, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Stretch"
+                              MinHeight="300"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

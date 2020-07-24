@@ -19,48 +19,50 @@ namespace PolishVehicleRecords.Services.DataSource.CepikApi
             httpClient = new HttpClient();
         }
 
-        public async Task<List<CarType>> GetCarTypes()
+        public Task<List<CarType>> GetCarTypes()
         {
             StringBuilder url = new StringBuilder(MAIN_URL);
             url.Append("/rodzaj-pojazdu");
 
             var carTypes = new List<CarType>();
 
-            await httpClient.GetAsync(url.ToString()).ContinueWith(async response =>
+            var t = httpClient.GetAsync(url.ToString()).ContinueWith(response =>
             {
                 var result = response.Result;
-                await result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
+                var t = result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
                 {
                     var jsonSettings = new JsonSerializerSettings();
                     jsonSettings.ContractResolver = new CustomCarTypeResolver();
-                    var data = JsonConvert.DeserializeObject<JsonResponse<Records<CarType>>>(jsonTask.Result, jsonSettings).data;
-                    carTypes = data.Select(s => s.attributes.records).ToList();
+                    var result = jsonTask.Result;
+                    var data = JsonConvert.DeserializeObject<JsonResponse<Data<Records<List<CarType>>>>>(result, jsonSettings).data;
+                    return data.attributes.records;
                 });
+                return t.Result;
             });
 
-            return carTypes;
+            return t;
         }
 
-        public async Task<List<Voivodeship>> GetVoivodeships()
+        public Task<List<Voivodeship>> GetVoivodeships()
         {
             StringBuilder url = new StringBuilder(MAIN_URL);
-            url.Append("/rodzaj-pojazdu");
+            url.Append("/wojewodztwa");
 
-            var voivedoships = new List<Voivodeship>();
-
-            await httpClient.GetAsync(url.ToString()).ContinueWith(async response =>
+            var t = httpClient.GetAsync(url.ToString()).ContinueWith(response =>
             {
                 var result = response.Result;
-                await result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
+                var t = result.Content.ReadAsStringAsync().ContinueWith(jsonTask =>
                 {
                     var jsonSettings = new JsonSerializerSettings();
-                    jsonSettings.ContractResolver = new CustomCarTypeResolver();
-                    var data = JsonConvert.DeserializeObject<JsonResponse<Records<Voivodeship>>>(jsonTask.Result, jsonSettings).data;
-                    voivedoships = data.Select(s => s.attributes.records).ToList();
+                    jsonSettings.ContractResolver = new CustomVoivedoshipResolver();
+                    var result = jsonTask.Result;
+                    var data = JsonConvert.DeserializeObject<JsonResponse<Data<Records<List<Voivodeship>>>>>(result, jsonSettings).data;
+                    return data.attributes.records;
                 });
+                return t.Result;
             });
 
-            return voivedoships;
+            return t;
         }
     }
 }

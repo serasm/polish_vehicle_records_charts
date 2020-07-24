@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PolishVehicleRecords.Services
 {
-    interface ICarsData
+    public interface ICarsData
     {
         public Task<List<Car>> GetCars(CarsSearch search);
     }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PolishVehicleRecords.Services
 {
-    interface IDictionariesValues
+    public interface IDictionariesValues
     {
         public Task<List<Voivodeship>> GetVoivodeships();
         public Task<List<CarType>> GetCarTypes();

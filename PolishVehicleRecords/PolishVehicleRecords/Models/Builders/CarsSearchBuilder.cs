@@ -16,6 +16,7 @@ namespace PolishVehicleRecords.Models.Builders
         public CarsSearchBuilder SetDateRange(DateTime fromDate, DateTime? toDate = null)
         {
             SearchForm.StartDate = fromDate;
+            SearchForm.EndDate = (DateTime)toDate;
             return this;
         }
 
@@ -51,6 +52,12 @@ namespace PolishVehicleRecords.Models.Builders
         public CarsSearchBuilder SetCarTypes(List<string> types)
         {
             SearchForm.Types = types;
+            return this;
+        }
+
+        public CarsSearchBuilder SetPage(int page)
+        {
+            SearchForm.Page = page;
             return this;
         }
 
